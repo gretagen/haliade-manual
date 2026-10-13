@@ -2,17 +2,11 @@ HaliadeOS allows you to swap PID 1, which is your init system, and the first thi
 
 The init system is what manages ALL of your services.
 
-Here's the direct definition from Wikipedia :
+On HaliadeOS, the default init is OpenRC.
 
-init (abbreviation of initialization) is the first computer program running on Unix-based operating systemsUnix. It is run like a computer daemon and has the process identifier (PID) 1. init is launched by the kernel and remains active until the system is turned off. He is the direct or indirect parent of all other programs launched on the system.
+But like I said before, swapping the init system inside Haliade is possible using the "iniswap" command
 
-on HaliadeOS, the default init is obviously OpenRC.
-
-But like I said before, swapping an init inside Haliade is possible, and a single helps you do it.
-
-which is the "iniswap" command.
-
-iniswap allows you to swap from openrc to runit, from runit to dinit, from dinit to openrc and so on
+iniswap allows you to swap from OpenRC to Runit, from Runit to Dinit, from Dinit to Openrc and so on>
 When swapping, the past init and it's services are kept so you can swap back and forth seamlessly.
 
 Init swapping is also the reason most zeta packages are "universal" and do not provide service files, so that means you'll have to learn to write services for your init of choice
@@ -20,7 +14,7 @@ but I assume you already know how to.
 
 A generation is created on each init swap so you can always recover your system if something goes wrong during swapping.
 
-the iniswap help prompt summarizes itself :
+the iniswap help prompt summarizes itself:
 
 Usage: iniswap [--pass] <init>
 
@@ -38,4 +32,3 @@ You can declare the init system you want to use inside the system definition.
 iniswap also provides universal shutdown and reboot scripts so they behave the same on each init you have swapped to.
 
 iniswap is a relatively simple tool and not much has to be said about it, as all it does is swap the init on next boot.
-

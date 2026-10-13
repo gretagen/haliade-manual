@@ -1,16 +1,15 @@
-You must've noticed that when inside the bootloader (limine) there are two entries :
+You also might noticed that when inside the bootloader (Limine) there are two entries:
 
-One being Haliade OS (your system)
-And the other being the "generations" section.
+One being "Haliade OS" (your system) and "generations" section.
 
-This is not decorative, this is the Haliade OS generation system, managed by the "chronos" command.
+This is the Haliade OS generation system, managed by the "chronos" command.
 
 Generations are snapshots of your system, they allow you to rollback to a previous version of your Haliade system if you have broken something (like the system itself, or something important to you)
 
-We believe that users should not have to spend hours or minutes of their life trying to fix a problem,
+We believe that users should not have to spend hours of their life trying to fix a problem,
 which is why generations exists in the first place.
 
-Generations are done automatically when :
+Generations are done automatically when:
 
 -- synchronizing the system definition
 -- synchronizing a house
@@ -21,7 +20,7 @@ Since those are what we consider "dangerous to tweak around with.", due to the f
 
 Even if generations are created automatically during these moments, good practice is to create a generation when you believe something you do can be destructive so you can always rollback.
 
-The chronos help prompt summarizes how to manage generations :
+The chronos help prompt summarizes how to manage generations:
 
 Usage: chronos <command> [args]
 
@@ -44,4 +43,4 @@ Limine menu:
   /Haliade OS                              boots live (@ or @.next)
   /Generations//Haliade OS (Generation N)  boots @snapshots/gen-N
 
-Now you know how to manage generations. So don't be afraid of experimenting!
+Now you know how to manage generations. Have fun experimenting!

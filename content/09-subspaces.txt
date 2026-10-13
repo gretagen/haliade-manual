@@ -1,18 +1,17 @@
 This is perhaps the feature you have been interested to know about.
 
 Subspaces (or subsystems) are isolated linux distribution environments that you can access and experiment in,
-it offers choices such as NixOS, Debian, Arch Linux, Void Linux, Gentoo, Fedora and Opensuse.
+it offers choices such as NixOS, Debian, Arch Linux, Void Linux, Gentoo, Fedora and OpenSUSE.
 
 Subspaces allow the user to have GUI support, start a GUI application inside the debian subspace, and it'll be forwarded
 to Haliade, the app will think it's running on debian, but it's running on Haliade, with full GPU accelaration.
 
 All subspaces are isolated and do not conflict with one-another, you can for example have multiple instances
-of the same application (like discord) running on each distro, and they will not conflict with one another
-because they are all isolated.
+of the same application (like discord) running on each distro, and they will not conflict with one another because they are all isolated.
 
 All subspaces are isolated at the "/subspace" directory.
 
-The subspace feature offers you multiple tools :
+The subspace feature offers you multiple tools:
 
 -- subspace-cli (what you use to install and remove subspaces)
 -- subspace-enter (to enter a subspace)
@@ -22,7 +21,7 @@ The subspace feature offers you multiple tools :
 
 All this, by taking no extra memory usage.
 
-subspace-cli's help prompt sumnarizes how they work :
+subspace-cli's help prompt sumnarizes how they work:
 
 Usage: subspace-cli [options] <command> [args]
 

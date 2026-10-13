@@ -25,12 +25,12 @@ It also has some features such as:
 -- command guessing
 -- terminal multiplexing.
 
-autocompletion allows TheSH to autocomplete the command when you press TAB from your history.
+Autocompletion allows TheSH to autocomplete the command when you press TAB from your history.
 guesser is in it's name, it tries to "guess" the command you tried to type in case you mispell it, basically Thesh's version of autocorrect.
 
-Thesh can also allow you to have terminal multiplexing (a bit like on tmux, but easier to configure),
-allowing you have multiple terminal sessions in one terminal or TTY.
-You can use it by pressing these keys (that you can also change at anytime)
+Thesh can also allow you to have terminal multiplexing (like on tmux, but easier to configure),
+allowing you have multiple terminal sessions in one terminal or the TTY.
+You can use it with these keybindings (configurable)
 
 - alt + v to tile vertically
 - alt + h to tile horizontally
