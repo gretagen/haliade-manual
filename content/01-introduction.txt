@@ -1,8 +1,8 @@
 HaliadeOS is a linux based operating system created by Gretagen.
 
-It is a minimal, reproducible, and open source system made to easy to adapt to, and is systemd-free.
+It is a minimal, reproducible, and open source system made to easy to adapt to, and is systemd free.
 
-This manual will show you the following :
+This manual will show you the following:
 
 -- How to install HaliadeOS
 -- How to configure HaliadeOS declaratively
@@ -16,5 +16,5 @@ This manual will show you the following :
 -- declarative plugins
 
 
-It is recommended to read this manual as you install the OS, as there is a lot to cover up
+It is recommended to read this manual as you install the OS, as there is a lot to cover.
 If you ever feel lost when using the OS, don't hesitate to use the manual!

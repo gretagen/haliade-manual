@@ -1,5 +1,5 @@
 This is the most complex and most interesting feature of the OS itself.
-So let me sumnarize it for you :
+So let me summarize it for you:
 
 Merging is a part of the subspace feature, it allows you to "merge" a package from a subspace.
 for example, you can install a window manager via arch's subspace onto Haliade OS itself.
@@ -8,25 +8,25 @@ This works with a very clever trick.
 
 Using the package manager of the selected subspace, we trick it into downloading onto the Haliade system instead of it's container.
 
-This is incredibly dangerous to do, as package managers can conflict with ownership (some package managers are very strict about ownership of directories as a security feature, and rightfully so), and this is why we recommend users to download official haliade packages and only merge at their own risk.
+This is incredibly dangerous to do, as package managers can conflict with ownership (some package managers are very strict about ownership of directories as a security feature, and rightfully so), and this is why we recommend users to download official Haliade packages and only merge at their own risk.
 
 Why merging is dangerous is due that it can overwrite important system components and directories (such as glibc) and make the system unusable to use, which is why generations are created before every package merge.
 You can bypass this with the "--no-generation" flag, but it is not recommended unless you are testing inside a live environment of Haliade OS.
 
-Some distros, such as alpine, gentoo or nixos are not possible to merge due to the following :
+Some distros, such as Alpine, Gentoo or NixOS are not possible to merge due to the following:
 
-Alpine : musl instead of glibc
-Gentoo : requires source based compiling
-NixOS : weird filesystem architecture
+Alpine: musl instead of glibc
+Gentoo: requires source based compiling
+NixOS: weird filesystem architecture
 
 The other distros listed are possible to merge to the system.
 
-As always, merging provides 2 toolsets :
+As always, merging provides 2 toolsets:
 
--- merged-packages-update : allows you to update packages you merged
--- subspace-merge : allows you to merge packages from a subspace.
+-- merged-packages-update: allows you to update packages you merged
+-- subspace-merge: allows you to merge packages from a subspace.
 
-the subspace-merge help summarizes this :
+The subspace-merge help summarizes this:
 
 Usage: subspace-merge [options] <distro> [package]
 
@@ -53,10 +53,10 @@ one exists. A merge can replace host files and break the system, so
 overwriting existing files is permitted and a rollback generation is taken
 first unless --no-generation is given.
 
-Supported distros: arch, debian, fedora, opensuse, void
-Musl distros (alpine) cannot be merged.
+Supported distros: Arch, Debian, Fedora, OpenSUSe, Void
+Musl distros (Alpine) cannot be merged.
 
-same thing for merged-packages-update :
+Same thing for merged-packages-update:
 
 Usage: merged-packages-update [options] <distro|all>
 

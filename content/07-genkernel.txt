@@ -1,21 +1,18 @@
-You must have realized that the kernel used in this operating system is NOT so up to date...
+You must have realized that the kernel is NOT so up to date...
 
-But this fine, as this is how it was designed to be!
-after installation, you must directly update your kernel by compiling it yourself.
+However, this is intentional.
+After installation, you must update your kernel by compiling it yourself.
 
 This is where genkernel comes in, this command automates the process of building a linux kernel from an
 upstream official source (kernel.org), and then switches you to it automatically, so after a reboot, you'll
 be on the latest official kernel.
 
-A thing to note is that gcc is not preinstalled on this system to save space,
-to install it, type in your terminal "zeta -provide gcc" or declare it in your system definition
-
-to launch genkernel, type the "genkernel" command inside of your terminal,
-or do ctrl + k inside thesh.
+To launch genkernel, type the "genkernel" command inside of your terminal,
+or press ctrl + k inside thesh.
 
 Launching genkernel, you will be greeted with this.
 
-[INFO]  Genkernel : Custom kernels, made easy.
+[INFO]  Genkernel: Custom kernels, made easy.
 
 ══ Fetching latest kernel versions
 System running on kernel 6.18.10-gen
@@ -36,8 +33,8 @@ Select version to build [1]:
 It is recommended to choose stable.
 
 After choosing the kernel you want to use, it will ask you to either keep the config as it is
-configure it with menuconfig, or use a tinyconfig (not recommend to use tinyconfig)
+configure it with menuconfig, or use a tinyconfig (not recommend)
 
-it will then download the kernel, compile it, and switch you to it.
+It will then download the kernel, compile it, and switch you to it.
 When genkernel is done building, all you need to do is reboot, and your kernel will be up to date with all the
 latest patches.

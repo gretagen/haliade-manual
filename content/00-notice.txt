@@ -1,12 +1,12 @@
 This is the official Haliade OS manual.
 
-This documentation is community effort, and everyone is welcome to contribute or correct mistakes 
+This documentation is community effort, and everyone is welcome to contribute or correct mistakes
 done in the writing of this manual.
 
 (This manual is written and read entirely by a HUMAN, the tui hoewever was built with some AI code.)
 (The code of this manual is also documented by an AI.)
 
-If you want to contribute to the manual , please follow these rules :
+If you want to contribute to the manual, please follow these rules:
 
 -- No AI should be used to document the OS, please document what you know yourself.
 -- AI can be used to expand the code of the manual. But only if you know what the code does yourself.

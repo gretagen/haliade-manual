@@ -1,20 +1,19 @@
 You now know everything there is to know about Haliade OS!
 
-if you want to contribute to this project, it's documentation or components,
+If you want to contribute to this project, it's documentation or components,
 along with making it support more much software, please go on the GitHub at https://github.com/gretagen/HaliadeOS/
 
 If you want to ask questions, feel free to join the discord community of Haliade OS at https://discord.gg/SyFM6CcHKa
 
-Or check out the official QnA :
-
+Or check out the official QnA:
 https://github.com/gretagen/HaliadeOS/blob/main/QnA.md
 
 If you are experiencing issues or a confused about how Haliade OS works, please join the discord.
 
 Thank you for using Haliade OS!
 
-(This documentation was written by a human, which is the creator himself, if there any inconsistencies, please inform him.)
-(This manual was written on Sunday 4th October 2026)
+(This documentation was written by a human, if there any inconsistencies, please inform him.)
+(This manual was written on 2026-10-04 and last edited 2026-10-13)
 
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣾⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀

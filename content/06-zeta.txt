@@ -6,23 +6,23 @@ When declaring packages inside the declarative configuration, it is zeta that ac
 ZETA also has a personality of it's own (as it can speak to you directly), if you want it to shut up,
 disable it's ability of expression in the configuration
 
-to configure ZETA, you need to edit /etc/zeta/configuration.lua
-in the configuration file, you will be able to
+To configure ZETA, edit /etc/zeta/configuration.lua.
+In the configuration file, you will be able to:
 
 -- set a repository or index
 -- disable or enable verbosity
 -- disable or enable sarcastic quotes
 
-ZETA is used for the following :
+ZETA is used for the following:
 
 -- providing and removing software
--- updating your haliade system
+-- updating your Haliade system
 -- finding your software
 
 By default, zeta is incredibly verbose and this can lead to terminal flooding, you can disable this inside
 the config, or by using the "--silence" flag.
 
-the "zeta -Help" commands sums up how to use ZETA :
+the "zeta -Help" commands sums up how to use ZETA:
 
 Usage: zeta <command> [arguments] [flags]
 
@@ -97,5 +97,3 @@ Package format (one package.lua per package, returning a table):
 scratch directory and then runs its `test` hook when declared; without a hook
 it passes on payload integrity plus a non-empty staging tree. It is strictly
 offline and never installs anything or touches the package database.
-
-And this pretty much all you should know about the package manager!
