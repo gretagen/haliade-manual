@@ -12,7 +12,7 @@ or press ctrl + k inside thesh.
 
 Launching genkernel, you will be greeted with this.
 
-[INFO]  Genkernel; Custom kernels, made easy.
+[INFO]  Genkernel: Custom kernels, made easy.
 
 ══ Fetching latest kernel versions
 System running on kernel 6.18.10-gen
