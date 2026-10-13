@@ -8,17 +8,17 @@ You can configure thesh by editing /etc/theshrc or ~/.theshrc
 Thesh is made to be extremely customizable, but remains extremely lightweight.
 Thesh can also have configured binds (like the average window manager) that can serve as quick keyboard shortcuts.
 
-Thesh allows you to configure the following :
+Thesh allows you to configure the following:
 
--- it's layout (default being "[-root | haliade-] /path $")
--- it's colors
--- it's opacity
--- it's shortcut binds
--- it's aliases
--- typing animations
--- history limits
+-- The prompt (default being "[-root | haliade-] /path $")
+-- The colors
+-- The opacity
+-- The shortcut binds
+-- The aliases
+-- Typing animations
+-- History limits
 
-it also has some features such as :
+It also has some features such as:
 
 -- allowing you to type commands in UPPERCASE
 -- autocompletion / correction

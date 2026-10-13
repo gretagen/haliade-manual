@@ -9,10 +9,10 @@ Identify the drive you want to install Haliade to, and then proceed with the par
 Here is an example:
 
 [-root | haliade-] ~ $ lsblk
-NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
-loop0    7:0    0  1.2G  1 loop
-sda      8:0    0 16.1G  0 disk
-sr0     11:0    1  1.3G  0 rom
+NAME   MAJ:MIN RM    SIZE RO TYPE MOUNTPOINTS
+loop0    7:0    0    1.2G  1 loop
+sda      8:0    0  931.5G  0 disk
+sr0     11:0    1    1.3G  0 rom
 
 where "sda" is the disk we want to install Haliade on.
 
@@ -33,16 +33,16 @@ Your partitions should now look like this:
     /dev/sda2                            2099200            1953523711            1951424512            930.5G Linux filesystem
 
 Now, using the arrow keys, select the root partition and select [ Type ].
-In the menu, select the top most option (EFI system).
+In the menu, select the top most option (EFI system) and select [ Write ] and [ Exit. ]
 After you are done, verify with lsblk:
 
 [-root | haliade-] ~ $ lsblk
-NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
-loop0    7:0    0  1.2G  1 loop
-sda      8:0    0 16.1G  0 disk
-|-sda1   8:1    0    1G  0 part # boot partition
-`-sda2   8:2    0 930.5G  0 part # root partition
-sr0     11:0    1  1.3G  0 rom
+NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
+loop0    7:0    0   1.2G  1 loop
+sda      8:0    0  16.1G  0 disk
+|-sda1   8:1    0     1G  0 part <-- boot partition
+`-sda2   8:2    0 930.5G  0 part <-- root partition
+sr0     11:0    1   1.3G  0 rom
 
 As you can see, we have properly partitioned our drive, and we can now proceed to the installation.
 to install Haliade, we will call the "zstrappa" command.
@@ -68,8 +68,8 @@ Examples:
   zstrappa --uefi /dev/sda2 /dev/sda1
 
 In my case, the command will be "zstrappa /dev/sda1 /dev/sda2"
-after doing this commmand, zstrappa will copy a bunch of files over to your partitions, do not be alarmed, this is just how zstrappa does it.
-zstrappa copies all the files and directories of the root tree of this live environment, allowing an offline and faster install.
-zstrappa will also create a generation, we'll get to them later
-after zstrappa is done installing, you can reboot the machine and use Haliade OS normally.
-(If you are installing, go back to the manual after reboot so it can explain how to properly use it)
+After executing this commmand, zstrappa will set up the system for you.
+zstrappa copies all the files and directories of the root tree of this live environment, allowing for an offline and fast install.
+zstrappa will also create a generation, but we'll get to them later.
+After zstrappa is done installing, you can reboot the machine and use Haliade OS normally.
+Once rebooted, open the manual after reboot so it can explain how to properly use it

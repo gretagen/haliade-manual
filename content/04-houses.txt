@@ -1,28 +1,26 @@
-HaliadeOS has another declarative system called "Houses".
+HaliadeOS also has another declarative system called "Houses".
 This is Haliade's way to do home management.
 
 Houses are a declarative and reproducible way to replicate how your system looked like, or what was in the system.
 including dotfiles, scripts, config files, or downloaded media.
 
-The system house is stored at /etc/houses/house.lua
-But can also be local to each user at their ~/.config. (~/.config/houses/house.lua)
-(you can access the example house config by doing ctrl + alt + h in your shell)
-
+The system house is stored at /etc/houses/house.lua but can also be local to each in ~/.config/houses/house.lua
+You can access the example house config by doing ctrl + alt + h thesh (default shell)
 
 The house focuses on environment, like your living room.
-The house allows you to :
+The house allows you to:
 
 -- declare config files
 -- declare scripts
 -- run commands (like git clone or more)
 -- download files from the internet
 
-so you can replicate your setups perfectly, and share them with everyone, accross every Haliade OS system,
+So you can replicate your setups perfectly, and share them with everyone, accross every Haliade OS system,
 no matter their init, packages, or anything else that's different from your system.
 
-(when synchronizing the house of someone else, remember to check what's inside,
+(When synchronizing the house of someone else, remember to check what's inside,
 if a house breaks your Haliade system, the development team is not responsible for the damage done.)
 
-to synchronize your house, use the "house-synchronize" command.
+To synchronize your house, use the "house-synchronize" command.
 
-As always, learn more inside the example file.
+For more information, read the example file.
