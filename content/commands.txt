@@ -21,6 +21,6 @@ subspace-run
 subspace-sync
 subspace-merge
 merged-packages-update
-haliade-synchronize
-house-synchronize
+haliade-sync
+house-sync
 thesh

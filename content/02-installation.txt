@@ -1,4 +1,4 @@
-To install HaliadeOS, you must partition your drives first.
+To install Haliade, you must partition your drives first.
 
 Preferably, you can partition your drive using the "cfdisk" utility
 
@@ -57,7 +57,7 @@ Options:
   --uefi        Force UEFI bootloader installation
   --bios        Force BIOS/legacy bootloader installation
 
-Install Haliade OS from the live ISO to a target block device.
+Install HaliadeSYS from the live ISO to a target block device.
 
 Arguments:
   root-device   Target root partition (e.g. /dev/sda2, /dev/nvme0n1p2)
@@ -71,5 +71,5 @@ In my case, the command will be "zstrappa /dev/sda1 /dev/sda2"
 After executing this commmand, zstrappa will set up the system for you.
 zstrappa copies all the files and directories of the root tree of this live environment, allowing for an offline and fast install.
 zstrappa will also create a generation, but we'll get to them later.
-After zstrappa is done installing, you can reboot the machine and use Haliade OS normally.
+After zstrappa is done installing, you can reboot the machine and use Haliade normally.
 Once rebooted, open the manual after reboot so it can explain how to properly use it

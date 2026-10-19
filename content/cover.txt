@@ -14,6 +14,6 @@
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠛⠛⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 
-Welcome to the Haliade OS manual.
-This will teach you everything about HaliadeOS.
+Welcome to the Haliade system manual.
+This will teach you everything about the Haliade system.
 press TAB for sections, right for next page, left for previous page

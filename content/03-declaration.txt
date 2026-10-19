@@ -1,4 +1,4 @@
-HaliadeOS is a hybrid declarative-imperative operating system and allows you to configure it within a single file.
+Since the Haliade system is a hybrid declarative-imperative operating system and allows you to configure it within a single file.
 This file is what we call the "system definition", is located at /etc/haliade/definition.lua
 (you can also access it by doing ctrl + h inside your shell)
 
@@ -21,14 +21,14 @@ The system definition allows you to edit / configure these by default:
 -- filesystem table
 -- SSH
 
-After configuration or edit, you must run the "haliade-synchronize" command, this command read your config,
+After configuration or edit, you must run the "haliade-sync" command, this command read your config,
 tells you the changes that will occur, and then synchronize the system from the definition.
 
-Unlike NixOS, this does not "rebuild" your system, but only syncs it to what you have declared.
+Unlike NixOS, this does not "rebuild" your system, but only synchronizes it to what you have declared.
 
 The haliade definition file is made to reproduce Haliade systems such that you don't have to set up everything by yourself
 all over again, or if you want better control about how the system is architectured.
 
-Declaring HaliadeOS is not forced, but it is recommended to use the OS with a declarative approach instead of a imperative approach.
+Declaring HaliadeSYS is not forced, but it is recommended to use the system with a declarative approach instead of a imperative approach (to maintain reproducibility).
 
 Everything you do imperatively (mostly) will not be touched by the declarative system. Most exceptions being subspaces, services, etc

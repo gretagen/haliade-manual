@@ -1,8 +1,8 @@
 You also might noticed that when inside the bootloader (Limine) there are two entries:
 
-One being "Haliade OS" (your system) and "generations" section.
+One being "Haliade syS" (your system) and "generations" section.
 
-This is the Haliade OS generation system, managed by the "chronos" command.
+This is the Haliade generation system, managed by the "chronos" command.
 
 Generations are snapshots of your system, they allow you to rollback to a previous version of your Haliade system if you have broken something (like the system itself, or something important to you)
 
@@ -40,7 +40,7 @@ Layout:
   @snapshots/gen-N     read-only generations
 
 Limine menu:
-  /Haliade OS                              boots live (@ or @.next)
-  /Generations//Haliade OS (Generation N)  boots @snapshots/gen-N
+  /Haliade SYS                              boots live (@ or @.next)
+  /Generations//Haliade SYS (Generation N)  boots @snapshots/gen-N
 
 Now you know how to manage generations. Have fun experimenting!

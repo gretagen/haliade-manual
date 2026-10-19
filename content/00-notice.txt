@@ -1,4 +1,4 @@
-This is the official Haliade OS manual.
+This is the official Haliade system manual.
 
 This documentation is community effort, and everyone is welcome to contribute or correct mistakes
 done in the writing of this manual.

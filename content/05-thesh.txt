@@ -1,4 +1,4 @@
-Thesh is the default shell of HaliadeOS, and an alternative to bash, zsh and fish.
+Thesh is the default shell of Haliade, and an alternative to bash, zsh and fish.
 This is the shell you have seen the second you have logged into the system, and (probably) the shell you are
 currently using.
 

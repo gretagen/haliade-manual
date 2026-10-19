@@ -1,4 +1,4 @@
-ZETA (Zenith Energy Turbine Archiver) is the package manager of HaliadeOS, and it is what you will use to shape your system.
+ZETA (Zenith Energy Turbine Archiver) is the package manager of Haliade, and it is what you will use to shape your system.
 
 It is also what was used to build the system you are using.
 When declaring packages inside the declarative configuration, it is zeta that actually installs them.
