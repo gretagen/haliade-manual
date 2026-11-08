@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Terminal=false
+Exec=xdg-open https://github.com/gretagen/HaliadeSYS/wiki/
+Name=HaliadeSYS Manual
+Icon=/home/gretagen/haliade-manual/manual-gui/icon.png
+Comment=Learn how HaliadeSYS works.
+Path=
+StartupNotify=false
