@@ -11,9 +11,11 @@
 
 zstrappa
 zeta
+zeta-makepkg
 chronos
 iniswap
 genkernel
+nacelle
 shell
 subspace-cli
 subspace-enter
@@ -21,6 +23,4 @@ subspace-run
 subspace-sync
 subspace-merge
 merged-packages-update
-haliade-sync
-house-sync
 thesh

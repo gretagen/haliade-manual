@@ -4,16 +4,17 @@ It is a minimal,hbrid, reproducible, declarative and open source system made to 
 
 This manual will show you the following:
 
--- How to install Haliade
--- How to configure Haliade declaratively
--- Home management
+-- How to acquire and install Haliade
+-- How to configure Haliade declaratively (with the nacelle)
+-- Home management (houses)
 -- How to configure thesh
 -- How to use ZETA (the package manager)
 -- How to update your kernel
 -- How to manage generations
 -- Subspaces, and merging.
 -- Init swapping
--- declarative plugins
+-- declarative plugins / generators
+-- How to write packages for ZETA
 
 
 It is recommended to read this manual as you install the system, as there is a lot to cover.

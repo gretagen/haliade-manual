@@ -35,9 +35,12 @@ Commands:
   remove  <distro> [distro...]    Remove one or more installed subspaces
   list                            List installed subspaces
 
+Available distros:
+  debian, alpine, gentoo, void, fedora, opensuse, arch, nixos
+
 Now you know how to use a subspace.
 
-You can declare what subspaces you want installed and what is included in each of them inside the system definition.
+You can declare what subspaces you want installed and what is included in each of them inside the system nacelle (see the Declaration section).
 
 (This is basically Haliade's version of WSL, except more lightweight, and more efficient.)
 

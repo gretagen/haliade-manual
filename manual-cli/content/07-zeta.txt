@@ -9,9 +9,10 @@ disable it's ability of expression in the configuration
 To configure ZETA, edit /etc/zeta/configuration.lua.
 In the configuration file, you will be able to:
 
--- set a repository or index
+-- set repositories or an index
 -- disable or enable verbosity
 -- disable or enable sarcastic quotes
+-- set how many packages are provided at the same time
 
 ZETA is used for the following:
 
@@ -30,22 +31,27 @@ Commands:
   -Provide <pkg>...       Install packages and their dependencies from the remote repository
   -ReProvide <pkg>...     Reinstall packages even if they are already installed
   -LocalProvide <pkg>...  Install packages from the local /packages tree
+  -Solve <pkg>...         Repair a package by reinstalling its direct
+                          dependencies (the package itself is left intact).
+                          With --isolate, rebuild its whole reserved store
+                          instead.
   -Transcend              Update all installed packages to their latest versions
-  -Remove <pkg>...        Remove installed packages (see --with-deps)
+  -Delete <pkg>...        Delete installed packages (see --with-deps)
   -List                   List installed packages and dependencies
   -Localize <query>       Search the remote repository index for <query>
+                          (shows the repository each package is served from)
   -Test <pkg>             Verify <pkg> offline WITHOUT installing it
-  -Forget                 Remove all cached packages
+  -Forget                 Delete all cached packages
   -Help                   Show this help
 
 Flags:
   --pass                  Skip the Y/N confirmation prompt and proceed immediately
   --force                 Override reverse-dependency and already-installed safety checks
-                          (removal still asks for confirmation)
-  --with-deps             With -Remove, also remove dependencies that are no longer
-                          required by any installed package (never removes packages
+                          (deletion still asks for confirmation)
+  --with-deps             With -Delete, also delete dependencies that are no longer
+                          required by any installed package (never deletes packages
                           installed explicitly)
-  --detail                Deprecated: -Remove now always lists every file
+  --detail                Deprecated: -Delete now always lists every file
   --silence               Suppress tar extraction file listings
                           (faster on slow terminals)
   --isolate               With -Provide/-ReProvide/-LocalProvide: install into a
@@ -53,9 +59,13 @@ Flags:
                           (package + full dependency closure, exposed through
                           <root>/zeta/reserve/profile/bin and linked into
                           /usr/bin / /usr/sbin, skipping names already taken).
-                          With -Remove: delete the isolated store instead of
+                          With -Solve: rebuild that store in place.
+                          With -Delete: delete the isolated store instead of
                           the system copy.
   --no-quote              Disable random startup quotes
+  --jobs=N                How many packages may be provided at the same time
+                          (default: 2; `jobs = nproc` in the config file
+                          uses every core)
 
 Configuration:
   /etc/zeta/configuration.lua   System-wide configuration (Lua table)
@@ -63,10 +73,14 @@ Configuration:
 
   Example /etc/zeta/configuration.lua:
     return {
-      repo = "https://github.com/gretagen/zeta-index",
+      repos = {
+        "https://github.com/gretagen/zeta-index",
+        "https://github.com/gretagen/declarative-plugins",
+      },
       root = "/",
       verbose = false,
       quotes = false,
+      jobs = nproc, -- every core (or a plain number)
     }
 
 Installed state is tracked in three registries under /var/db/zeta:
@@ -76,13 +90,14 @@ Installed state is tracked in three registries under /var/db/zeta:
 
 Environment:
   ZETA_ROOT            Filesystem root packages are installed into   (default: /)
-  ZETA_REPO            Remote repository base URL (github.com served via    (default: https://github.com/gretagen/zeta-index)
-                       raw.githubusercontent.com)
+  ZETA_REPOS           Remote repository URLs, space-separated, tried in order  (default: https://github.com/gretagen/zeta-index)
+  ZETA_REPO            Single remote repo base URL (one-entry ZETA_REPOS)  (default: https://github.com/gretagen/zeta-index)
   ZETA_LOCAL_PACKAGES  Local /packages tree                          (default: /usr/share/packages)
   ZETA_CACHE           Download cache                                (default: $ZETA_ROOT/var/cache/zeta)
   ZETA_STATE           Package database                              (default: $ZETA_ROOT/var/db/zeta)
   ZETA_VERBOSE         Verbose output (1 or true to enable)          (default: false)
   ZETA_RESERVE         Isolated package store location               (default: $ZETA_ROOT/zeta/reserve)
+  ZETA_JOBS            Packages provided at the same time (or "nproc")  (default: 2)
 
 Package format (one package.lua per package, returning a table):
   return {

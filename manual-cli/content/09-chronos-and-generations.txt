@@ -1,0 +1,92 @@
+You also might noticed that when inside the bootloader (Limine) there are two entries:
+
+One being "HaliadeSYS" (your system) and the "generations" section.
+
+This is the Haliade generation system, managed by the "chronos" command.
+
+Generations are snapshots of your system, they allow you to rollback to a previous version of your Haliade system if you have broken something (like the system itself, or something important to you)
+
+We believe that users should not have to spend hours of their life trying to fix a problem,
+which is why generations exists in the first place.
+
+Note that generations are read-only, you never edit one, you boot one. If your main entry stops booting, pick a generation from the boot menu and roll back to it from there.
+
+Generations are done automatically when:
+
+-- synchronizing the system nacelle
+-- synchronizing the house nacelle
+-- merging a package from another distro subspace
+-- swapping init systems
+
+Since those are what we consider "dangerous to tweak around with.", due to the fact they can be potentially destructive to the system.
+
+Even if generations are created automatically during these moments, good practice is to create a generation when you believe something you do can be destructive so you can always rollback.
+
+The chronos help prompt summarizes how to manage generations:
+
+Usage: chronos <command> [args]
+
+Commands:
+  create <description>   Snapshot live root as a new read-only generation
+  list                   List generations (* = last created/current)
+  current                Show current generation and booted subvolume
+  rollback <N>           Roll back to generation N (reboot required)
+  remove <N>|all         Delete one, or every, generation
+  rewrite-limine         Regenerate /boot/limine.conf
+  cleanup-next           Delete staged @.next after a completed rollback
+  help                   Show this help
+
+Only create/rollback/remove/rewrite-limine/cleanup-next need superuser
+privileges; list, current and help can be run by any user.
+
+Layout:
+  @                    live writable root
+  @.next               staged rollback target (temporary)
+  @snapshots/gen-N     read-only generations
+
+Limine menu:
+  /HaliadeSYS                               boots live (@ or @.next)
+  /Generations//HaliadeSYS (Generation N)  boots @snapshots/gen-N
+
+Kernels:
+  Each entry boots the kernel its subvolume has modules for. Generations
+  keep the kernel they were captured with; the default entry follows the
+  subvolume it boots (a staged @.next rollback keeps its own kernel too).
+
+How a rollback actually works
+
+You can't delete a btrfs subvolume while it's mounted, and you're booted from
+@, which is exactly the one you'd want to replace. So a normal rollback
+happens in two stages:
+
+1. "chronos rollback N" copies generation N into @.next and points the
+   default boot entry at it. Nothing on your live root is touched yet.
+2. You reboot. You're now running on the rolled-back @.next.
+3. The next time chronos promotes it (on a subsequent "create" or
+   "rewrite-limine"), it first keeps a copy-on-write backup as
+   @.old-<timestamp>, then replaces @ with what was @.next. Nothing is ever
+   lost.
+4. Reboot once more into the real @, then run "chronos cleanup-next" to drop
+   the leftover @.next.
+
+There's a shortcut: if you booted straight into a generation to recover from
+something, you're not on a mounted @, so chronos replaces @ in one step with
+no @.next detour.
+
+Why a rollback is safe
+
+A few deliberate choices are what make rolling back reliable rather than
+just possible:
+
+-- Each generation boots its own kernel. A snapshot only contains the kernel
+   modules it was captured with, so chronos pins every generation entry to
+   that kernel rather than the newest one in /boot.
+-- The init system rolls back too. The boot cmdline's init= parameter is
+   restored from the generation, and /var/db/init is kept in step, so the
+   shutdown and reboot wrappers still do the right thing right after a
+   rollback.
+-- Chronos won't let you trap yourself. "create" refuses to snapshot a
+   generation boot (you have to be on the live system), and "remove" refuses
+   to delete the current or currently-booted generation.
+
+Now you know how to manage generations. Have fun experimenting!

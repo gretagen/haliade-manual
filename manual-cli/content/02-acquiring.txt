@@ -1,0 +1,21 @@
+Before you can install Haliade, you must get the HaliadeSYS ISO first.
+
+The ISO is around 1.4 gigabytes, or slightly more depending on what your
+system says. You can get it in one of two ways:
+
+-- Via the Haliade website (if it is up)
+-- Via the project's github page
+
+Download it, and you are ready for the next step.
+
+Obviously and sadly so, Haliade does not work on every machine, and does not
+support every architecture. To boot Haliade, your machine should:
+
+-- Have UEFI support (as BIOS support has not been implemented)
+-- Have an X86_64 format
+-- Have at least 2 gigabytes of RAM
+
+And you should be good to go.
+
+If your machine does not meet these requirements, Haliade will not boot for
+you, so please check before you download and flash anything.

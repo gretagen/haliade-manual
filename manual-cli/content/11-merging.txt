@@ -53,8 +53,8 @@ one exists. A merge can replace host files and break the system, so
 overwriting existing files is permitted and a rollback generation is taken
 first unless --no-generation is given.
 
-Supported distros: Arch, Debian, Fedora, OpenSUSe, Void
-Musl distros (Alpine) cannot be merged.
+Supported distros: arch, debian, fedora, opensuse, void
+Musl distros (alpine) cannot be merged.
 
 Same thing for merged-packages-update:
 
@@ -80,6 +80,6 @@ Merging is optional and experimental. Prefer a native Haliade package wherever
 one exists. Updating can replace host libraries and break the system, which is
 why a rollback generation is taken first unless --no-generation is given.
 
-You can also declare packages you want to merge and from which distro inside the system definition.
+You can also declare packages you want to merge and from which distro inside the system nacelle (see the Declaration section).
 
 Now you know how merging pretty much works and why it's a fun feature despite it being destructive.

@@ -1,0 +1,46 @@
+Do you sometimes wish you could just declare things that can not be declared as default?
+This is actually possible with extra generators / plugins.
+
+Let's say for example that you have nix installed on this Haliade system
+Nix, being a seperate package manager, it's packages can not be declared until you use a helper module.
+
+A helper allows you to add generators to the nacelle,
+To add a generator, it must be a Lua file at /usr/lib/nacelle/generators that exposes a plan(cfg, sync) function, just like the built-in ones.
+They are installed automatically if you install a helper package, but if it is not packaged, you may need to manually add the generator
+
+After the generator is added, you need to enable it, which you can do with:
+
+    nacelle enable-generator system nixpkgs
+
+That's all it takes. This edits the system category's enable list at /etc/nacelle/enabled_system_generators.lua, the same list "nacelle see-enabled system" shows you. Remove a name from it and that generator is disabled, add one and it runs. Because the list lives in /etc (not inside any declaration or helper package), neither a declaration update nor installing a helper can ever reset it, only you decide what's enabled.
+
+Your declaration in /etc/nacelle/definition.lua already accepts any section you write in it; an enabled generator is what makes that section do something.
+A helper package can also ship a plugin config to /etc/nacelle/plugin-configs, which your nacelle reads automatically on every sync.
+Plugin configs give an added section a default value and type checking, the same as the built-in sections have, so a mistyped section is reported instead of silently ignored.
+For example the nixpkgs helper ships /etc/nacelle/plugin-configs/nixpkgs.lua, which is why the ["nixpkgs"] section works out of the box once the generator is enabled.
+
+With the nix generator enabled, a section like this is all it takes to declare nix packages:
+
+    ["nixpkgs"] = {
+      "nixpkgs#fastfetch",
+      "nixpkgs#ripgrep",
+      "github:guibou/nixGL",
+    }
+
+Then just "nacelle spin system", and they're installed alongside everything else in your declaration.
+
+A couple of design choices are shared across every helper, and they're worth knowing:
+
+-- Installs are system-wide, not per-user. Each generator deliberately
+   installs into a shared, system-level location so that a sync run as root
+   makes the packages visible to every user, not just root.
+-- They only ever remove what they declared. Each generator records the
+   entries it added, in /var/db/declared-<section>, and only ever removes
+   entries from that record. A package you installed yourself by hand is
+   never yanked out from under you by the declaration. This is what makes
+   Haliade imperative-declarative.
+-- A missing backend warns, it doesn't crash. If the tool isn't installed,
+   the generator plans nothing and tells you why, so one absent package
+   manager can't fail an otherwise fine sync.
+
+After setting up the helper module / plugin, you will be able to declare what you want to declare!

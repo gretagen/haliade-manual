@@ -219,16 +219,15 @@ load_vocabulary() {
 }
 
 load_vocabulary "$commands_file" CMD_VOCAB \
-    zstrappa zeta chronos iniswap genkernel \
+    zstrappa zeta zeta-makepkg chronos iniswap genkernel nacelle \
     subspace-cli subspace-enter subspace-run subspace-sync \
-    subspace-merge merged-packages-update \
-    haliade-synchronize house-synchronize thesh
+    subspace-merge merged-packages-update thesh
 
 load_vocabulary "$concepts_file" CONCEPT_VOCAB \
     declaration declarative declare declared definition subspaces houses \
     configure configuration config synchronizing generations swapping swap \
     isolate isolated merge merging helper module modules \
-    generator generators plugin plugins
+    generator generators plugin plugins nacelle spin repower constructs
 
 COLS=80
 ROWS=24

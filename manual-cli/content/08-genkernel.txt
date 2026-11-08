@@ -7,6 +7,12 @@ This is where genkernel comes in, this command automates the process of building
 upstream official source (kernel.org), and then switches you to it automatically, so after a reboot, you'll
 be on the latest official kernel.
 
+Any kernels built by genkernel end with the "-gen" flag.
+
+The genkernel help prompt is:
+
+Usage: genkernel [--dry-run] [--jobs N]
+
 To launch genkernel, type the "genkernel" command inside of your terminal,
 or press ctrl + k inside thesh.
 
@@ -38,3 +44,11 @@ configure it with menuconfig, or use a tinyconfig (not recommend)
 It will then download the kernel, compile it, and switch you to it.
 When genkernel is done building, all you need to do is reboot, and your kernel will be up to date with all the
 latest patches.
+
+I can not compile
+
+For people that do not wish to compile or have hardware they consider "too weak" for compilation, Haliade ships prebuilt binaries of the linux kernel, even though this kernel binary has less updates than the genkernel.
+
+Note about genkernel
+
+In Nvidia machines, a step of genkernel may fail (initramfs generation step), however, this is a false alarm, your kernel is installed, you are just not switched over to it, to make sure, write "chronos rewrite-limine" (see the Chronos and Generations section) in your terminal and reboot, you should be on the latest kernel afterwards, if not, please report an issue, as I am aware of it.
