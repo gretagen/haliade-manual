@@ -3,8 +3,13 @@ Encoding=UTF-8
 Version=1.0
 Type=Application
 Terminal=false
+<<<<<<< HEAD
 Exec=xdg-open https://github.com/gretagen/HaliadeSYS/wiki/
 Name=HaliadeSYS Manual
+=======
+Exec=manual-gui
+Name=HaliadeSYS Manual 
+>>>>>>> cef7419f636b76e14ada5ce26c96952de44434ab
 Icon=/home/gretagen/haliade-manual/manual-gui/icon.png
 Comment=Learn how HaliadeSYS works.
 Path=

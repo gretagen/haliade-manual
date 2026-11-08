@@ -1,7 +1,15 @@
 This is the official Haliade OS manual.
+
+The manual comes in two flavors:
+
+-- manual-cli: a dependency-light TUI pager for the terminal, with its
+   content in manual-cli/content/
+-- manual-gui: a desktop entry that opens the HaliadeSYS wiki in your
+   browser
+
 Covering features such as :
 
--- How to install HaliadeOS                                                                                     
+-- How to acquire and install HaliadeOS                                                                                     
 -- How to configure HaliadeOS declaratively                                                                     
 -- Home management                                                                                              
 -- How to configure thesh                                                                                       
@@ -11,6 +19,7 @@ Covering features such as :
 -- Subspaces, and merging.                                                                                      
 -- Init swapping                                                                                                
 -- declarative plugins                                                                                          
+-- How to write packages for ZETA                                                                               
 
 This documentation is community effort, and everyone is welcome to contribute or correct mistakes 
 done in the writing of this documentation.
