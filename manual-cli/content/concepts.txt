@@ -1,0 +1,51 @@
+# Important Haliade terms rendered yellow in the manual.
+#
+# One word per line, matched as a whole word anywhere in a section's text,
+# case-insensitively. Anything after # is a comment, and blank lines are
+# ignored.
+#
+# Matching is token-exact on the bare word, so merge goes yellow while
+# subspace-merge stays cyan, swap goes yellow while iniswap stays cyan, and
+# /etc/nacelle/definition.lua stays plain because it is a single token.
+#
+# Commands beat concepts: a word listed in commands.txt is cyan not yellow.
+# {{markers}} beat both.
+#
+# Delete this file and the manual falls back to the built-in list below.
+
+declaration
+declarative
+declaratively
+declare
+declared
+home
+management
+definition
+subspaces
+subsystems
+houses
+configure
+configuration
+config
+synchronizing
+swapping
+swap
+isolate
+isolated
+init
+merge
+merging
+helper
+module
+modules
+generator
+generators
+generations
+generation
+plugin
+plugins
+rollback
+nacelle
+spin
+repower
+constructs

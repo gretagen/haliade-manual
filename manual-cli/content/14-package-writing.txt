@@ -1,0 +1,186 @@
+This section is for contributors who want to write packages for ZETA, the
+package manager of Haliade. This is how packages for ZETA get made on
+HaliadeSYS: the recipe, the toolchain, the rules the packager enforces for
+you, and the flow from "upstream released something" to "installed on the
+system".
+
+The two repositories
+
+Everything lives in two git repos:
+
+-- zeta-constructs: payload tarballs + the package.lua currently being
+   staged. Zeta downloads payloads from its raw URLs.
+-- zeta-index: one packages/<name>/package.lua per package, plus the
+   generated packages/index.lua. Used by "zeta -Localize", "zeta -Provide",
+   and dependency resolution.
+
+A recipe is a local file (mine live in ~/haliade-work/recipes/) that
+"zeta-makepkg" consumes to produce the pair: a payload tarball in constructs
+and a package.lua you copy into the index. Recipes are not committed
+anywhere by default, the manifest that ships is the record.
+
+Packages can also live outside both repos: the python package points at
+zeta-nemesis, pip-generator points at declarative-plugins. The manifest in
+the index just carries a raw URL, it does not care which repo serves it.
+Keep versions in sync by hand across such mirrors.
+
+Recipe anatomy
+
+A recipe is a Lua table. An annotated real one (meson build):
+
+    return {
+      name           = "power-profiles-daemon",
+      version        = "0.30",
+      summary        = "Makes power profiles management available over D-Bus (laptops)",
+      url            = "https://gitlab.example/power-profiles-daemon-0.30.tar.gz",
+      sha256         = "90f2c950468f001af9206ec8e6c",
+      deps           = { "glib", "systemd-libs", "polkit", "libgudev" },
+      build_system   = "meson",
+      configure_args = { "--buildtype=release", "--libdir=/usr/lib" },
+      test           = "test -x ${DESTDIR}/usr/libexec/power-profiles-daemon",
+    }
+
+The fields:
+
+-- url: the upstream SOURCE tarball, not the constructs payload.
+-- sha256: of exactly that file, take it from PyPI/gitlab/github digests,
+   don't guess.
+-- deps: zeta package names, the closure check polices this.
+-- archive_format: only "gz" or "xz" are accepted, the recipe validator
+   refuses anything else.
+-- build_system: "meson", "autotools", or "custom".
+-- configure_args: passed to meson/autotools setup.
+-- build_script: for "custom" builds, a shell script beside the recipe, run
+   from the extracted source root with $DESTDIR set.
+-- test: shell chain run against the staged tree before packaging, treat it
+   as the contract.
+
+The source is extracted into a work dir; if the tarball has a single
+top-level directory, the build script runs inside it.
+
+Building
+
+    env PATH=/home/gretagen/.local/bin:/usr/bin:/bin \
+        PKG_CONFIG_PATH=/home/gretagen/haliade-work/pkgconfig \
+        zeta-makepkg ~/haliade-work/recipes/<name>.recipe \
+        --output ~/zeta-constructs \
+        --repo https://raw.githubusercontent.com/gretagen/zeta-constructs/refs/heads/main \
+        --no-index --force
+
+The pipeline is: fetch, extract, build into a stage, clean_stage, test,
+dependency-closure check, tarball + package.lua in the output dir.
+
+Two rules learned the hard way:
+
+-- --libdir=/usr/lib, always. Meson defaults to lib64 on this host, but the
+   distro (and every pkg-config search path) is /usr/lib.
+-- For "custom" builds, install with "install -m 755" or "cp -a" into
+   $DESTDIR/usr/..., never touch the real root from a build.
+
+clean_stage: the packager is init-agnostic, like it or not
+
+Before testing, the toolchain purges init files from the stage: directories
+like usr/lib/systemd, etc/systemd, etc/init.d, etc/rc.d, etc/runlevels, and
+files like *.service, *.timer, *.socket, *.path, *.mount, *.target. The one
+exemption: .service files containing a [D-BUS Service] header are dbus
+activation files and survive, a non-systemd system still needs those.
+
+So a package can never enable, start, or even mention an init. Daemon
+packages ship the binary; the service file is local config the admin writes
+under /etc/dinit.d/, then symlinked into /etc/dinit.d/boot.d/ to enable.
+This keeps every package portable across iniswap (dinit, systemd, shepherd,
+runit, openrc).
+
+Upstream systemd units in the build are not an error to fix: pass
+-Dsystemdsystemunitdir=no (or equivalent) so they never get generated,
+rather than fighting the purge.
+
+deps and the dependency closure
+
+After the test, "zeta-makepkg" reads every ELF NEEDED entry in the payload
+and requires each to map to a declared dep:
+
+    error dependency closure check failed -- undeclared providers:
+    libgudev-1.0.so.0 (provided by undeclared libgudev)
+
+Fix by adding the provider package to deps. Scripts (python/shell) are
+invisible to this check, declare their needs explicitly anyway.
+
+The lib-only trap
+
+Many older packages in the index shipped only the .so, no headers, no .pc.
+The package works at runtime but nothing can build against it:
+
+    Package 'libseat', required by 'wlroots-0.20', not found
+
+If a build dies on a missing .pc or header, check the provider's payload
+with "tar -tzf" and grep for .pc or include/ entries. Zero means repack it:
+same upstream, full make/meson install (or manual install of header +
+generated .pc), version bumped as X.Y.Z-2 (seatd 0.9.3 becomes 0.9.3-2).
+
+The test contract
+
+test is a shell string against the stage, ${DESTDIR} is the stage root.
+Three tiers, from cheapest to fancier:
+
+1. Structural: "test -x", "test -f", "grep -q" for the strings that matter
+   (a renamed flag, a path the runtime depends on).
+2. Staged functional runs, possible when the program resolves its assets
+   relative to itself (zeta's launcher finds ../lib/zeta/zeta.lua, so
+   ${DESTDIR}/usr/bin/zeta -Help runs from the stage).
+3. Behavioral unit tests, embed a "lua -e" program that requires the staged
+   module and drives it against a fake host API.
+
+For python payloads, "ast.parse(open(...).read())" is a litter-free syntax
+check (py_compile writes __pycache__ into the stage).
+
+Python packages
+
+-- Use the sdist (.tar.gz): the extractor only understands tar archives, a
+   .whl (zip) hard-errors.
+-- A pure-python "build" is often just file copying: src/pip into
+   usr/lib/python3.X/site-packages/, plus a hand-assembled dist-info with
+   METADATA, WHEEL, entry_points.txt, and RECORD.
+-- pip reads its own version through importlib.metadata, so the dist-info is
+   not optional.
+-- Console scripts are a #!/usr/bin/python3 shim, check [project.scripts] in
+   pyproject for the exact set.
+-- The system interpreter carries a PEP 668 EXTERNALLY-MANAGED marker:
+   declarative/system installs need --break-system-packages.
+
+Publishing flow
+
+1. Build (above). package.lua lands next to the tarball in constructs.
+2. Move the manifest to the index and drop the constructs copy:
+
+       mkdir -p ~/zeta-index/packages/<name>
+       cp ~/zeta-constructs/packages/<name>/package.lua ~/zeta-index/packages/<name>/
+       rm ~/zeta-constructs/packages/<name>/package.lua
+       zeta-makepkg --index --output ~/zeta-index
+
+3. Commit "git add -A" before "git pull --rebase", the rebase refuses to run
+   with unstaged changes, and index.lua regenerations conflict easily. Push
+   both repos.
+4. Install: "zeta -Provide <name>", or -ReProvide when the ledger says it is
+   already provided (upgrades). Then smoke-test for real: binary runs,
+   --version/help output, and where meaningful, the actual feature.
+
+Version etiquette
+
+-- Normal update: bump the third digit (0.18.2 becomes 0.18.3).
+-- Re-pack of the same upstream (adding a dev payload, fixing contents):
+   append -2 (0.9.3 becomes 0.9.3-2).
+-- Never change a shipped tarball under an existing name+version, the sha in
+   the index would lie.
+
+Common pitfalls
+
+-- meson puts things in usr/lib64: missing --libdir=/usr/lib.
+-- recipe archive_format must be "gz" or "xz": the validator whitelist, use
+   gz.
+-- Package 'foo', required by 'bar', not found: the lib-only trap, repack
+   provider with dev payload (-2).
+-- closure undeclared providers: add the provider to deps.
+-- clean_stage removed N blocked files: you shipped init files, convert them
+   to build options (-Dsystemdsystemunitdir=no).
+-- extract fails on a .whl: the toolchain is tar-only, take the sdist.

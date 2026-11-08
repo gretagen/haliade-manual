@@ -1,0 +1,114 @@
+ZETA (Zenith Energy Turbine Archiver) is the package manager of Haliade, and it is what you will use to shape your system.
+
+It is also what was used to build the system you are using.
+When declaring packages inside the declarative configuration, it is zeta that actually installs them.
+
+ZETA also has a personality of it's own (as it can speak to you directly), if you want it to shut up,
+disable it's ability of expression in the configuration
+
+To configure ZETA, edit /etc/zeta/configuration.lua.
+In the configuration file, you will be able to:
+
+-- set repositories or an index
+-- disable or enable verbosity
+-- disable or enable sarcastic quotes
+-- set how many packages are provided at the same time
+
+ZETA is used for the following:
+
+-- providing and removing software
+-- updating your Haliade system
+-- finding your software
+
+By default, zeta is incredibly verbose and this can lead to terminal flooding, you can disable this inside
+the config, or by using the "--silence" flag.
+
+the "zeta -Help" commands sums up how to use ZETA:
+
+Usage: zeta <command> [arguments] [flags]
+
+Commands:
+  -Provide <pkg>...       Install packages and their dependencies from the remote repository
+  -ReProvide <pkg>...     Reinstall packages even if they are already installed
+  -LocalProvide <pkg>...  Install packages from the local /packages tree
+  -Solve <pkg>...         Repair a package by reinstalling its direct
+                          dependencies (the package itself is left intact).
+                          With --isolate, rebuild its whole reserved store
+                          instead.
+  -Transcend              Update all installed packages to their latest versions
+  -Delete <pkg>...        Delete installed packages (see --with-deps)
+  -List                   List installed packages and dependencies
+  -Localize <query>       Search the remote repository index for <query>
+                          (shows the repository each package is served from)
+  -Test <pkg>             Verify <pkg> offline WITHOUT installing it
+  -Forget                 Delete all cached packages
+  -Help                   Show this help
+
+Flags:
+  --pass                  Skip the Y/N confirmation prompt and proceed immediately
+  --force                 Override reverse-dependency and already-installed safety checks
+                          (deletion still asks for confirmation)
+  --with-deps             With -Delete, also delete dependencies that are no longer
+                          required by any installed package (never deletes packages
+                          installed explicitly)
+  --detail                Deprecated: -Delete now always lists every file
+  --silence               Suppress tar extraction file listings
+                          (faster on slow terminals)
+  --isolate               With -Provide/-ReProvide/-LocalProvide: install into a
+                          self-contained store at <root>/zeta/reserve/<pkg>-<version>
+                          (package + full dependency closure, exposed through
+                          <root>/zeta/reserve/profile/bin and linked into
+                          /usr/bin / /usr/sbin, skipping names already taken).
+                          With -Solve: rebuild that store in place.
+                          With -Delete: delete the isolated store instead of
+                          the system copy.
+  --no-quote              Disable random startup quotes
+  --jobs=N                How many packages may be provided at the same time
+                          (default: 2; `jobs = nproc` in the config file
+                          uses every core)
+
+Configuration:
+  /etc/zeta/configuration.lua   System-wide configuration (Lua table)
+  Precedence: env vars > config file > defaults
+
+  Example /etc/zeta/configuration.lua:
+    return {
+      repos = {
+        "https://github.com/gretagen/zeta-index",
+        "https://github.com/gretagen/declarative-plugins",
+      },
+      root = "/",
+      verbose = false,
+      quotes = false,
+      jobs = nproc, -- every core (or a plain number)
+    }
+
+Installed state is tracked in three registries under /var/db/zeta:
+  packages/<name>      every package you installed explicitly
+  dependencies/<name>  packages pulled in automatically as dependencies
+  isolated/<name>      packages installed with --isolate (meta carries reserve_root)
+
+Environment:
+  ZETA_ROOT            Filesystem root packages are installed into   (default: /)
+  ZETA_REPOS           Remote repository URLs, space-separated, tried in order  (default: https://github.com/gretagen/zeta-index)
+  ZETA_REPO            Single remote repo base URL (one-entry ZETA_REPOS)  (default: https://github.com/gretagen/zeta-index)
+  ZETA_LOCAL_PACKAGES  Local /packages tree                          (default: /usr/share/packages)
+  ZETA_CACHE           Download cache                                (default: $ZETA_ROOT/var/cache/zeta)
+  ZETA_STATE           Package database                              (default: $ZETA_ROOT/var/db/zeta)
+  ZETA_VERBOSE         Verbose output (1 or true to enable)          (default: false)
+  ZETA_RESERVE         Isolated package store location               (default: $ZETA_ROOT/zeta/reserve)
+  ZETA_JOBS            Packages provided at the same time (or "nproc")  (default: 2)
+
+Package format (one package.lua per package, returning a table):
+  return {
+    name="glib", version="2.88.1", url="https://.../glib-2.88.1.tar.xz",
+    sha256="...", deps={"libffi","pcre2"},
+    archive={ strip=1 },          -- binary install: fetch, unpack, install
+    -- or: install=function(p) ... end,   or: build=function(p) ... end
+    test=function(p) ... end,     -- optional verification hook for -Test
+  }
+
+-Test runs the package's full pipeline (fetch, checksum, unpack/build) into a
+scratch directory and then runs its `test` hook when declared; without a hook
+it passes on payload integrity plus a non-empty staging tree. It is strictly
+offline and never installs anything or touches the package database.

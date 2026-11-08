@@ -1,0 +1,106 @@
+Since the Haliade system is a hybrid declarative-imperative operating system
+and allows you to configure it within a single file. This file is what we
+call the "system definition", is located at /etc/nacelle/definition.lua
+(you can also access it by doing ctrl + h inside your shell)
+
+To learn more, please look at the example configuration file.
+
+Everything is done through the "nacelle" command, which is Haliade's
+declarative definition system. The syntax is:
+
+nacelle [action] {system|house} [/path/to/file.lua] [option]
+
+The two categories are exact words, so it's always either "system" or
+"house", never an alias.
+
+The nacelle actions are:
+
+-- spin: Synchronize a category, apply your declaration to the machine
+-- repower: Rebuild a category, same as spin, but re-applies everything even
+   if it already looks satisfied
+-- register: Save a copy of a category's config under a name, for later
+-- unregister: Delete one of those saved copies
+-- load: Put a saved copy back in place as the live config
+-- see-registered: List the saved copies of a category
+-- see-enabled: Show which generators a category currently runs
+-- enable-generator: Add a generator to a category's enable list
+-- disable-generator: Remove a generator from a category's enable list
+-- help: Print the built-in help
+
+Example:
+
+    nacelle spin system
+    nacelle spin house
+    nacelle repower system
+    nacelle register system
+    nacelle see-enabled house
+
+The nacelle also has 2 options:
+
+-- --verbose: print the diagnostics as it goes (which files it reads, which
+   commands it runs, what each planner decided)
+-- --no-generation: apply everything, but don't create a new boot generation
+   afterwards (obviously not recommended)
+
+Note that "spin system" needs superuser privileges, since it touches system
+files, packages, services, and basically is the system core. "spin house"
+does not need root at all, you can sync your dotfiles as a normal user.
+
+When you spin a category, a few things happen in order:
+
+1. Your definition file is loaded and validated against the schema. A
+   typo'd type stops things here with an error naming the key, before
+   anything is touched.
+2. Every enabled generator runs its planner. Each one reads what's currently
+   on disk and works out the changes it would need.
+3. All the changes are gathered and printed as a preview, grouped by
+   section, marked [+] (add), [~] (modify) or [-] (remove).
+4. You're asked y/N. Nothing has been applied yet at this point, so you can
+   read the plan and back out.
+5. If you confirm, the changes are applied in a sensible order (installs
+   happen before removals, so a package swap never leaves a gap).
+6. A new generation is created with chronos so you can roll back if it all
+   went wrong (see the Chronos and Generations section).
+
+The system definition allows you to edit / configure these by default:
+
+-- the system identity (hostname, timezone, locale, hwclock, keymap,
+   consolefont)
+-- bootloader (limine timeout, wallpaper, serial output, kernel cmdline...)
+-- init system (openrc, runit, dinit, systemd, shepherd)
+-- services (for each init)
+-- environment variables (your editor, browser)
+-- users
+-- packages
+-- isolated packages
+-- subspaces
+-- packages installed in each subspace
+-- merged packages
+-- kernel modules
+-- filesystem table
+-- SSH
+
+Unlike NixOS, this does not "rebuild" your system, but only synchronizes it
+to what you have declared.
+
+The haliade definition file is made to reproduce Haliade systems such that
+you don't have to set up everything by yourself all over again, or if you
+want better control about how the system is architectured.
+
+Declaring HaliadeSYS is not forced, but it is recommended to use the system
+with a declarative approach instead of a imperative approach (to maintain
+reproducibility).
+
+Everything you do imperatively (mostly) will not be touched by the
+declarative system. Most exceptions being subspaces, services, etc
+
+Spin is clever enough to leave things alone that already match your
+declaration, if a package is already installed, it won't try to reinstall it.
+That's usually exactly what you want. However, you may sometimes want to
+force everything to be re-laid-down, that's what "repower" is for. It's the
+Haliade equivalent of nixos-rebuild switch, every "already satisfied" check
+is bypassed, so every declared package is rebuilt and every declared setting
+is re-applied, even on a machine that was already perfectly in sync.
+
+For more information about the nacelle, check the wiki, and the example
+configuration file.

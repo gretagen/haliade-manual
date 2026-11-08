@@ -1,0 +1,44 @@
+The Haliade system also has another declarative system called "Houses",
+which is part of the nacelle's "house" category.
+
+This is Haliade's way to do home management.
+
+Houses are a declarative and reproducible way to replicate how your system
+looked like, or what was in the system, including dotfiles, scripts, config
+files, or downloaded media.
+
+The house definition lives at /etc/nacelle/houses/house.lua
+You can access the example house config by doing ctrl + alt + h in thesh
+(default shell)
+
+The house focuses on environment, like a living room of some sorts.
+The house allows you to declare 4 things:
+
+-- edit: configuration files, written out exactly as you write them. This is
+   where your dotfiles go, map a destination path to its content.
+-- script: the same thing as edit, but each file is made executable after
+   it's written. Use it for anything meant to be run.
+-- media: files to download, mapped from a destination to a URL. Point the
+   key at a directory (note the trailing /) and it'll figure out the filename
+   from the URL, or give it a full path to name it yourself.
+-- command: shell commands to run, in the order you list them. Each one is
+   either just a string, or a table if you want more control, with wd for
+   working directory, and creates/check as "is it already done?" tests.
+
+So you can replicate your setups perfectly, and share them with everyone,
+accross every Haliade system, no matter their init, packages, or anything
+else that's different from your system.
+
+(When synchronizing the house of someone else, remember to check what's
+inside, if a house breaks your Haliade system, the development team is not
+responsible for the damage done.)
+
+To synchronize your house, use the "nacelle spin house" command. Like the
+system side, a house sync shows you the plan first and asks before applying,
+and it creates a generation afterwards if you ran it as root.
+
+Note that a house can absolutely wreck your system if you point it at the
+wrong thing (or if it happens to do a destructive command), so be careful
+what's in a house before you sync it as root.
+
+For more information, read the example file.

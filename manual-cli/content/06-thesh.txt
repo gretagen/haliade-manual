@@ -1,0 +1,67 @@
+Thesh (TheSHell) is the default shell of Haliade, and an alternative to bash,
+zsh and fish. This is the shell you have seen the second you have logged into
+the system, and (probably) the shell you are currently using.
+
+The default prompt looks like this:
+
+    [ user | hostname ] ~/current/dir >
+
+To note:
+
+-- For scripts, it is recommended to invoke bash instead of thesh or sh, as
+   thesh does not support that much syntax for executable scripts.
+
+You can configure thesh by editing /etc/theshrc or ~/.theshrc
+(read it's config by doing ctrl + e)
+
+Thesh is made to be extremely customizable, but remains extremely lightweight.
+Thesh can also have configured binds (like the average window manager) that
+can serve as quick keyboard shortcuts.
+
+Thesh allows you to configure the following:
+
+-- The prompt (called "looks", or "layout", a template of tokens like $USER,
+   $HOSTNAME, $PATH and $CURSOR)
+-- The colors (each prompt element takes its own color, with textcolor as the
+   fallback)
+-- The opacity (each colorable element takes an opacity percentage)
+-- The shortcut binds (bind = ALT + V = exec('some-command') style)
+-- The aliases
+-- Typing animations (none, matrix, newcomer, placement, spinner)
+-- History limits (historylimit, default 500)
+
+It also has some features such as:
+
+-- allowing you to type commands in UPPERCASE
+-- autocompletion / correction
+-- command guessing
+-- terminal multiplexing.
+
+Autocompletion allows TheSH to autocomplete the command when you press TAB
+from your history. guesser is in it's name, it tries to "guess" the command
+you tried to type in case you mispell it, basically Thesh's version of
+autocorrect.
+
+Thesh can also allow you to have terminal multiplexing (like on tmux, but
+easier to configure), allowing you have multiple terminal sessions in one
+terminal or the TTY. You can use it with these keybindings (configurable)
+
+- alt + v to tile vertically
+- alt + h to tile horizontally
+- alt + arrowkeys to move.
+
+The multiplexer has no server and no sockets, panes are separated the way
+tmux does it, with thin lines, and the focused pane's separators glow in the
+active color. Full-screen apps work in each pane, and your binds keep
+working while a program runs.
+
+Thesh also has presets, which are named config files you can save and apply
+at will. "presets" prints a numbered list and lets you pick one, "savepreset"
+serializes your current config (options, colors, aliases and binds) as a
+preset file. Presets live in ~/.config/thesh/presets/ (user) and
+/etc/thesh/presets (system).
+
+Thesh also watches your rc files, so editing /etc/theshrc or ~/.theshrc
+takes effect on the next prompt, with no restart needed (autoreload).
+
+Learn more by checking the example file.

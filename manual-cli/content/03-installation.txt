@@ -1,0 +1,182 @@
+Some things about virtual machines, before we start:
+
+-- For VirtualBox, if you are using it, make sure the UEFI parameter in it is
+   active, and that you are running the live disk image in x86_64 mode.
+-- For HyprV, it is known to have issues, currently, I am unable to fix them.
+-- For Qemu, it depends really. I'm not sure, so feel free to report issues.
+
+About ventoy...:
+
+-- Ventoy is known to have issues with Haliade's bootloader, even though it
+   depends on your situation, Haliade may sometimes boot into the bootloader,
+   or simply not boot at all, this is because ventoy does not support
+   Haliade's primary bootloader, which is Limine.
+
+Booting the live iso
+
+Now that you have an iso and made sure the requirements of your machine are
+correct, you're now ready to boot into Haliade's live iso disk image.
+
+You must first flash it with either dd, or use a gui helper (Rufus,
+Impression, etc)... After you are done flashing the iso, you must reboot into
+firmware, and select the drive in which the HaliadeSYS iso disk image is
+burned on, and then select it for boot override. If done correctly, you
+should see the Limine live boot menu:
+
+    HaliadeSYS live-env
+
+You should boot into the first option, which is HaliadeSYS live-env (because
+there is no other option). We will now proceed with the installation process.
+
+Installing HaliadeSYS
+
+The HaliadeSYS installation is very very easy, it'll take 2 seconds of your
+time, most likely...
+
+(For beginners, this is likely the time you should turn back, if you have
+difficulty setting up or installing linux systems manually without a GUI,
+please do not proceed with the installation of this distribution, as you will
+mostly operate it using the terminal.)
+
+Fun thing to note:
+
+-- The installation of HaliadeSYS does not require an internet connection and
+   can be done fully offline, the boostrapper saves everything you do in the
+   live iso to the real system if you choose to install Haliade (learn more
+   below).
+
+When booting into HaliadeSYS, it'll mount your live drive, display a little
+animation, and will start the OpenRC init system (see more at
+https://en.wikipedia.org/wiki/OpenRC)
+
+If you have booted successfully, you should see a login prompt. Login as
+root, the password is "root".
+
+Set up your keymap using loadkeys, if you use QWERTY, this step is not
+needed. If you are an experienced user, you may also notice that the shell is
+different, this shell is thesh (learn more in the Thesh section of this
+manual).
+
+To partition our drives, we will use a command called cfdisk (see more at
+https://en.wikipedia.org/wiki/Cfdisk). This is the recommended partition
+tool, but you are free to use any partition tool you want.
+
+Locate your drive with lsblk with the disk you want to install haliade on:
+
+[-root | haliade-] ~ $ lsblk
+NAME   MAJ:MIN RM    SIZE RO TYPE MOUNTPOINTS
+loop0    7:0    0    1.2G  1 loop
+sda      8:0    0  931.5G  0 disk
+sr0     11:0    1    1.3G  0 rom
+
+In which the disk I want to install Haliade on is sda, which is located at
+/dev/sda. Typing "cfdisk" alone will default to sda, but depending on how
+many drives you have, sda may be the live environment itself, so it is
+extremely important to locate which drive you want Haliade to be installed
+on.
+
+In some cases, in partitions where an OS is already installed on, you do not
+need to create these 2 partitions, but only need to repartition or repurpose
+these drives.
+
+(You need to be EXTREMELY careful when manipulating ANY partition tool, one
+wrong use, and it might result into data loss!)
+
+We will create 2 partitions:
+
+-- A boot partition, being between 1 or 2 gb
+-- A root partition, covering the full drive.
+
+Execute the command "cfdisk /dev/[your-drive]", this will bring you into a
+TUI for partitioning your OS. Select "gpt" for the label type (if prompted).
+Using the arrow keys, select any partition and press <Delete> to delete them.
+After deleting any present partitions, use <Left> and <Right> to select
+[ New ] and input the size of the boot partition (1G). Then, create a root
+partition using the rest of the drive. (Click enter again when prompted.)
+Your partitions should now look like this:
+
+    Device                                 Start                   End               Sectors              Size Type
+>>  /dev/sda1                               2048               2099199               2097152                1G Linux filesystem
+    /dev/sda2                            2099200            1953523711            1951424512            930.5G Linux filesystem
+
+Now, using the arrow keys, select the root partition and select [ Type ].
+In the menu, select the top most option (EFI system) and select [ Write ] and
+[ Exit ]. After you are done, verify with lsblk:
+
+[-root | haliade-] ~ $ lsblk
+NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
+loop0    7:0    0   1.2G  1 loop
+sda      8:0    0  16.1G  0 disk
+|-sda1   8:1    0     1G  0 part <-- boot partition
+`-sda2   8:2    0 930.5G  0 part <-- root partition
+sr0     11:0    1   1.3G  0 rom
+
+Nice! Our disks have been partitioned correctly, and we can now proceed to
+the installation.
+
+We are now ready to bootstrap and install the OS, this is done using the
+zstrappa command. (please make sure you have partitioned the OS correctly,
+as all data from this disk will be wiped!)
+
+Usage: zstrappa [options] <root-device> [boot-device]
+
+Options:
+  --uefi        Force UEFI bootloader installation
+  --bios        Force BIOS/legacy bootloader installation
+
+Arguments:
+  root-device   Target root partition (e.g. /dev/sda2, /dev/nvme0n1p2)
+  boot-device   Optional separate boot partition (e.g. /dev/sda1)
+
+Examples:
+  zstrappa /dev/sda2 /dev/sda1
+  zstrappa --uefi /dev/sda2 /dev/sda1
+
+Note: For UEFI, the boot partition is auto-formatted as FAT32.
+
+So the command to install for me would be:
+
+    zstrappa --uefi /dev/sda2 /dev/sda1
+
+Adapt these to your partitions, and then enter. The root partition always
+comes first, the boot partition comes second.
+
+WARNING:
+
+-- (THIS WILL WIPE THE WHOLE DRIVE'S DATA, CHECK THE PARTITIONS.)
+
+As a failsafe, zstrappa will ask you if you want to bootstrap the system,
+type "y" and enter. Zstrappa will then convert the root drive to BTRFS (see
+more at https://en.wikipedia.org/wiki/Btrfs) and the boot drive to FAT32 (see
+more at
+https://en.wikipedia.org/wiki/File_Allocation_Table#FAT32), and you will then
+see a fountain of text that looks like this:
+
+relax, this is just zstrappa copying everything in the live to your
+partitions, including everything you may have possibly done inside the live
+iso, which is kept inside the installed system.
+
+Zstrappa will also create a generation, but we'll get to them later.
+
+When the bootstrapper is done, the fountain will stop, and will then add a
+boot entry to your firmware (so you can boot into the installed system), and
+it'll tell you to reboot. After reboot, you should see the Limine boot menu
+with 2 entries:
+
+-- The normal entry (your system)
+-- The "Generations" entry (see the Chronos and Generations section of this
+   manual)
+
+And you have now finished installing Haliade! Booting into the system, you
+will notice there's no longer a boot animation, and that OpenRC will start
+immediately with the login directly. If you haven't changed the password,
+login is root, and password is root, as always.
+
+Post-install
+
+Now that you've installed it, you must learn how to use the OS before we
+proceed to set up, you'll first learn thesh, the package manager, and finally
+the nacelle, these is the 3 things you need to learn to survive using
+HaliadeSYS.
+
+If you want, you'll then learn the other features.
