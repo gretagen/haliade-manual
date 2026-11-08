@@ -1,1 +1,3 @@
-xdg-open https://github.com/gretagen/HaliadeSYS/wiki/
+#!/bin/sh
+# manual-gui: desktop launcher for the HaliadeSYS manual — opens the wiki.
+exec xdg-open "https://github.com/gretagen/HaliadeSYS/wiki/"
